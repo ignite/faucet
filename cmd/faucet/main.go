@@ -9,10 +9,10 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/tendermint/starport/starport/pkg/chaincmd"
-	chaincmdrunner "github.com/tendermint/starport/starport/pkg/chaincmd/runner"
-	"github.com/tendermint/starport/starport/pkg/cosmosfaucet"
-	"github.com/tendermint/starport/starport/pkg/cosmosver"
+	"github.com/ignite/cli/ignite/pkg/chaincmd"
+	chaincmdrunner "github.com/ignite/cli/ignite/pkg/chaincmd/runner"
+	"github.com/ignite/cli/ignite/pkg/cosmosfaucet"
+	"github.com/ignite/cli/ignite/pkg/cosmosver"
 )
 
 func main() {
@@ -34,32 +34,9 @@ func main() {
 		ccoptions = append(ccoptions, chaincmd.WithHome(home))
 	}
 
-	if legacySendCmd {
-		ccoptions = append(ccoptions, chaincmd.WithLegacySendCommand())
-	}
-
-	switch sdkVersion {
-	case "stargate-44":
-		ccoptions = append(ccoptions,
-			chaincmd.WithVersion(cosmosver.StargateFortyFourVersion),
-		)
-	case "stargate-40":
-		ccoptions = append(ccoptions,
-			chaincmd.WithVersion(cosmosver.StargateFortyVersion),
-		)
-	case "launchpad":
-		ccoptions = append(ccoptions,
-			chaincmd.WithVersion(cosmosver.MaxLaunchpadVersion),
-			chaincmd.WithLaunchpadCLI(appCli),
-		)
-		if home != "" {
-			ccoptions = append(ccoptions, chaincmd.WithLaunchpadCLIHome(home))
-		}
-	default:
-		ccoptions = append(ccoptions,
-			chaincmd.WithVersion(cosmosver.Latest),
-		)
-	}
+	ccoptions = append(ccoptions,
+		chaincmd.WithVersion(cosmosver.Latest),
+	)
 
 	cr, err := chaincmdrunner.New(context.Background(), chaincmd.New(appCli, ccoptions...))
 	if err != nil {

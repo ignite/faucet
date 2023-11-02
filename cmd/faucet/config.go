@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/tendermint/starport/starport/pkg/cosmosfaucet"
+	"github.com/ignite/cli/ignite/pkg/cosmosfaucet"
 
 	"github.com/tendermint/faucet/internal/environ"
 )
@@ -24,7 +24,6 @@ var (
 	creditAmount    uint64
 	maxCredit       uint64
 	nodeAddress     string
-	legacySendCmd   bool
 	coinType        string
 	home            string
 )
@@ -74,10 +73,6 @@ func init() {
 	flag.StringVar(&nodeAddress, "node",
 		environ.GetString("NODE", ""),
 		"address of tendermint RPC endpoint for this chain",
-	)
-	flag.BoolVar(&legacySendCmd, "legacy-send",
-		environ.GetBool("LEGACY_SEND", false),
-		"whether to use legacy send command",
 	)
 	flag.StringVar(&coinType, "coin-type",
 		environ.GetString("COIN_TYPE", "118"),
