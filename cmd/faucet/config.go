@@ -23,6 +23,7 @@ var (
 	defaultDenoms   string
 	creditAmount    uint64
 	maxCredit       uint64
+	feeAmount       uint64
 	nodeAddress     string
 	coinType        string
 	home            string
@@ -69,6 +70,10 @@ func init() {
 	flag.Uint64Var(&maxCredit,
 		"max-credit", environ.GetUint64("MAX_CREDIT", cosmosfaucet.DefaultMaxAmount),
 		"maximum credit per account",
+	)
+	flag.Uint64Var(&feeAmount,
+		"fee-amount", environ.GetUint64("FEE_AMOUNT", 0),
+		"fee to pay along with the transaction",
 	)
 	flag.StringVar(&nodeAddress, "node",
 		environ.GetString("NODE", ""),
