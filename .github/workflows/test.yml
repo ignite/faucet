@@ -1,6 +1,16 @@
 name: Test
 
-on: [ push ]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - release/*
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   test:
