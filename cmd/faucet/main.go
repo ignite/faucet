@@ -10,10 +10,10 @@ import (
 	sdkmath "cosmossdk.io/math"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/ignite/cli/ignite/pkg/chaincmd"
-	chaincmdrunner "github.com/ignite/cli/ignite/pkg/chaincmd/runner"
-	"github.com/ignite/cli/ignite/pkg/cosmosfaucet"
-	"github.com/ignite/cli/ignite/pkg/cosmosver"
+	"github.com/ignite/cli/v28/ignite/pkg/chaincmd"
+	chaincmdrunner "github.com/ignite/cli/v28/ignite/pkg/chaincmd/runner"
+	"github.com/ignite/cli/v28/ignite/pkg/cosmosfaucet"
+	"github.com/ignite/cli/v28/ignite/pkg/cosmosver"
 )
 
 func main() {
@@ -24,11 +24,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	version, err := cosmosver.Parse(sdkVersion)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	ccoptions := []chaincmd.Option{
 		chaincmd.WithKeyringPassword(keyringPassword),
 		chaincmd.WithKeyringBackend(configKeyringBackend),
 		chaincmd.WithAutoChainIDDetection(),
 		chaincmd.WithNodeAddress(nodeAddress),
+		chaincmd.WithVersion(version),
 	}
 
 	if home != "" {
@@ -36,7 +42,7 @@ func main() {
 	}
 
 	ccoptions = append(ccoptions,
-		chaincmd.WithVersion(cosmosver.Latest),
+		chaincmd.WithVersion(version),
 	)
 
 	cr, err := chaincmdrunner.New(context.Background(), chaincmd.New(appCli, ccoptions...))
@@ -45,18 +51,22 @@ func main() {
 	}
 
 	coins := strings.Split(defaultDenoms, denomSeparator)
-
-	faucetOptions := make([]cosmosfaucet.Option, len(coins))
-	for i, coin := range coins {
-		creditAmount := sdkmath.NewInt(int64(creditAmount))
-		maxCredit := sdkmath.NewInt(int64(maxCredit))
-
-		faucetOptions[i] = cosmosfaucet.Coin(creditAmount, maxCredit, coin)
+	if len(coins) == 0 {
+		log.Fatal("empty denoms")
 	}
 
-	faucetOptions = append(faucetOptions, cosmosfaucet.Account(keyName, keyMnemonic, coinType))
+	faucetOptions := []cosmosfaucet.Option{
+		cosmosfaucet.Version(version),
+		cosmosfaucet.Account(keyName, keyMnemonic, coinType),
+		cosmosfaucet.FeeAmount(sdkmath.NewInt(int64(feeAmount)), coins[0]),
+	}
+	for _, coin := range coins {
+		creditAmount := sdkmath.NewInt(int64(creditAmount))
+		maxCredit := sdkmath.NewInt(int64(maxCredit))
+		faucetOptions = append(faucetOptions, cosmosfaucet.Coin(creditAmount, maxCredit, coin))
+	}
+
 	// it is fair to consider the first coin added because it is considered as the default coin during transfer requests.
-	faucetOptions = append(faucetOptions, cosmosfaucet.FeeAmount(sdkmath.NewInt(int64(feeAmount)), coins[0]))
 
 	faucet, err := cosmosfaucet.New(context.Background(), cr, faucetOptions...)
 	if err != nil {

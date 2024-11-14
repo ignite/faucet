@@ -3,7 +3,8 @@ package main
 import (
 	"flag"
 
-	"github.com/ignite/cli/ignite/pkg/cosmosfaucet"
+	"github.com/ignite/cli/v28/ignite/pkg/cosmosfaucet"
+	"github.com/ignite/cli/v28/ignite/pkg/cosmosver"
 
 	"github.com/tendermint/faucet/internal/environ"
 )
@@ -39,8 +40,8 @@ func init() {
 		"keyring backend to be used",
 	)
 	flag.StringVar(&sdkVersion, "sdk-version",
-		environ.GetString("SDK_VERSION", "latest"),
-		"version of sdk (launchpad, stargate-40, stargate-44 or latest)",
+		environ.GetString("SDK_VERSION", cosmosver.Latest.String()),
+		"version of sdk",
 	)
 	flag.StringVar(&keyName, "account-name",
 		environ.GetString("ACCOUNT_NAME", cosmosfaucet.DefaultAccountName),
@@ -60,7 +61,7 @@ func init() {
 	)
 	flag.StringVar(&defaultDenoms, "denoms",
 		environ.GetString("DENOMS", cosmosfaucet.DefaultDenom),
-		"denomination of the coins sent by default (comma separated)",
+		"denomination comma separated of the coins sent by default (the first one will be used for the fee denom)",
 	)
 	flag.Uint64Var(&creditAmount,
 		"credit-amount",
