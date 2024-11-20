@@ -112,7 +112,7 @@ func faucetFlags(cmd *cobra.Command) {
 	)
 }
 
-func runCmdHandler(cmd *cobra.Command, args []string) error {
+func runCmdHandler(cmd *cobra.Command, _ []string) error {
 	var (
 		port, _            = cmd.Flags().GetInt(flagPort)
 		keyringBackend, _  = cmd.Flags().GetString(flagKeyringBackend)
