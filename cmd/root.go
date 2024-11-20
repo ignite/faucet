@@ -18,7 +18,7 @@ func NewRootCmd() *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
-			if cmd.Use != "completion" && cmd.Use != "explorer" {
+			if cmd.Use != "completion" && cmd.Use != "version" {
 				checkNewVersion(cmd.Context())
 			}
 
