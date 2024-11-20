@@ -22,10 +22,11 @@ const (
 	versionNightly = "nightly"
 )
 
-// Version is the semantic version of faucet.
+// Version is the semantic version of Faucet.
 var Version = versionDev
 
 type Info struct {
+	Version         string
 	GoVersion       string
 	BuildDate       string
 	SourceHash      string
@@ -36,7 +37,7 @@ type Info struct {
 	BuildFromSource bool
 }
 
-// CheckNext checks whether there is a new version of faucet.
+// CheckNext checks whether there is a new version of Faucet.
 func CheckNext(ctx context.Context) (isAvailable bool, version string, err error) {
 	if Version == versionDev || Version == versionNightly {
 		return false, "", nil
@@ -66,7 +67,7 @@ func getLatestReleaseTag(ctx context.Context) (string, error) {
 	latest, _, err := github.
 		NewClient(nil).
 		Repositories.
-		GetLatestRelease(ctx, "ignite", "cli")
+		GetLatestRelease(ctx, "ignite", "faucet")
 	if err != nil {
 		return "", err
 	}
@@ -78,7 +79,7 @@ func getLatestReleaseTag(ctx context.Context) (string, error) {
 	return *latest.TagName, nil
 }
 
-// fromSource check if the binary was build from source using the CLI version.
+// fromSource check if the binary was build from source using the Faucet version.
 func fromSource() bool {
 	return Version == versionDev
 }
@@ -123,9 +124,9 @@ func Long(ctx context.Context) (string, error) {
 	}
 	w.Init(b, 0, 8, 0, '\t', 0)
 
+	write("Version", info.Version)
 	write("Build date", info.BuildDate)
 	write("Source hash", info.SourceHash)
-
 	write("Your OS", info.OS)
 	write("Your arch", info.Arch)
 	write("Your go version", info.GoVersion)
@@ -142,7 +143,7 @@ func Long(ctx context.Context) (string, error) {
 	return b.String(), nil
 }
 
-// GetInfo gets the CLI info.
+// GetInfo gets the Faucet info.
 func GetInfo(ctx context.Context) (Info, error) {
 	var (
 		info     Info
@@ -187,6 +188,7 @@ func GetInfo(ctx context.Context) (Info, error) {
 	}
 
 	info.Uname = uname
+	info.Version = resolveDevVersion(ctx)
 	info.BuildDate = date
 	info.SourceHash = head
 	info.OS = runtime.GOOS
