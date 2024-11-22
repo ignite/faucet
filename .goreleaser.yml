@@ -1,8 +1,8 @@
 builds:
   - main: ./cmd/faucet
+    goos:
+      - linux
+      - darwin
     goarch:
       - amd64
       - arm64
-    ignore:
-      - goos: darwin
-        goarch: arm64
