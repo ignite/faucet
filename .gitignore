@@ -1,2 +1,7 @@
+.DS_Store
 .idea
+.vscode
+go.work
+go.work.sum
+bin/*
 build
