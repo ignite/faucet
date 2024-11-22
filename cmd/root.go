@@ -7,7 +7,8 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tendermint/faucet/version"
+	
+	"github.com/ignite/faucet/version"
 )
 
 const checkVersionTimeout = time.Millisecond * 600

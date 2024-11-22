@@ -1,4 +1,4 @@
-module github.com/tendermint/faucet
+module github.com/ignite/faucet
 
 go 1.23.1
 
