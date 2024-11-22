@@ -44,16 +44,16 @@ test: govet govulncheck test-unit
 
 build: go.sum
 ifeq ($(OS),Windows_NT)
-	go build -o build/faucet.exe ./cmd/faucet
+	go build -o build/faucet.exe .
 else
-	go build -o build/faucet ./cmd/faucet
+	go build -o build/faucet .
 endif
 
 build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
 
 install: go.sum
-	go install ./cmd/faucet
+	go install .
 
 ###############################################################################
 ###                          Tools & Dependencies                           ###
