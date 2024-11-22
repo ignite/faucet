@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -18,7 +19,9 @@ func NewRootCmd() *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
-			if cmd.Use != "completion" && cmd.Use != "version" {
+			// Check for new versions only when shell completion scripts are not being
+			// generated to avoid invalid output to stdout when a new version is available
+			if cmd.Use != "completion" || !strings.HasPrefix(cmd.Use, cobra.ShellCompRequestCmd) {
 				checkNewVersion(cmd.Context())
 			}
 
