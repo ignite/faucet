@@ -3,9 +3,11 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"strings"
 	"time"
 
+	"github.com/ignite/cli/v28/ignite/pkg/xhttp"
 	"github.com/spf13/cobra"
 
 	"github.com/ignite/faucet/version"
@@ -64,4 +66,27 @@ func checkNewVersion(ctx context.Context) {
 	}
 
 	fmt.Printf("⬆️ Gex %[1]v is available! To upgrade: https://github.com/ignite/gex/releases/%[1]v", next)
+}
+
+func versionHTTP(w http.ResponseWriter, r *http.Request) {
+	info, err := version.GetInfo(r.Context())
+	if err != nil {
+		responseError(w, http.StatusBadRequest, err)
+		return
+	}
+	responseSuccess(w, info)
+}
+
+type errResponse struct {
+	Error string `json:"error,omitempty"`
+}
+
+func responseError(w http.ResponseWriter, code int, err error) {
+	_ = xhttp.ResponseJSON(w, code, errResponse{
+		Error: err.Error(),
+	})
+}
+
+func responseSuccess(w http.ResponseWriter, info version.Info) {
+	_ = xhttp.ResponseJSON(w, http.StatusOK, info)
 }

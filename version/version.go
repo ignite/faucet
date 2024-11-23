@@ -26,15 +26,15 @@ const (
 var Version = versionDev
 
 type Info struct {
-	Version         string
-	GoVersion       string
-	BuildDate       string
-	SourceHash      string
-	OS              string
-	Arch            string
-	Uname           string
-	CWD             string
-	BuildFromSource bool
+	Version         string `json:"version"`
+	GoVersion       string `json:"go_version"`
+	BuildDate       string `json:"build_date"`
+	SourceHash      string `json:"source_hash"`
+	OS              string `json:"os,omitempty"`
+	Arch            string `json:"arch,omitempty"`
+	Uname           string `json:"uname,omitempty"`
+	CWD             string `json:"cwd,omitempty"`
+	BuildFromSource bool   `json:"build_from_source,omitempty"`
 }
 
 // CheckNext checks whether there is a new version of Faucet.

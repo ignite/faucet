@@ -181,7 +181,8 @@ func runCmdHandler(cmd *cobra.Command, _ []string) error {
 	}
 
 	http.HandleFunc("/", faucet.ServeHTTP)
-	cmd.Printf("listening on :%d", port)
+	http.HandleFunc("/version", versionHTTP)
+	cmd.Printf("listening faucet on :%d", port)
 
 	return http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }
