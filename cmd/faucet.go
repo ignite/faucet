@@ -14,7 +14,7 @@ import (
 	"github.com/ignite/cli/v28/ignite/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"github.com/tendermint/faucet/internal/environ"
+	"github.com/ignite/faucet/internal/environ"
 )
 
 const (
@@ -98,7 +98,7 @@ func faucetFlags(cmd *cobra.Command) {
 	cmd.Flags().String(
 		flagNode,
 		environ.GetString("NODE", ""),
-		"address of tendermint RPC endpoint for this chain",
+		"address of RPC endpoint for this chain",
 	)
 	cmd.Flags().String(
 		flagCoinType,

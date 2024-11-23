@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tendermint/faucet/cmd"
+	"github.com/ignite/faucet/cmd"
 )
 
 func main() {
