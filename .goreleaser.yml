@@ -1,5 +1,5 @@
 builds:
-  - main: ./cmd/faucet
+  - main: .
     goos:
       - linux
       - darwin
